@@ -2,9 +2,7 @@ package com.jeanlima.springrestapiapp.model;
 
 import java.util.Set;
 
-
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,12 +13,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-
-
 @Entity
-@Table(name = "cliente") //opicional caso a tabela tenha nome igual da entidadeou caso use schema!
+@Table(name = "cliente") // opicional caso a tabela tenha nome igual da entidadeou caso use schema!
 public class Cliente {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -31,33 +27,39 @@ public class Cliente {
     @Column(length = 11)
     private String cpf;
 
-    //um cliente pode ter muitos pedidos
+    // um cliente pode ter muitos pedidos
     /*
-     * mappedBy --> para a partir da classe cliente eu possa mapear/retornar os pedidos
-     * passo como parametro o campo, na tabela de pedidos, que faz referencia a cliente.
+     * mappedBy --> para a partir da classe cliente eu possa mapear/retornar os
+     * pedidos
+     * passo como parametro o campo, na tabela de pedidos, que faz referencia a
+     * cliente.
      * no caso é cliente.
      * 
-     * fetch  --> Lazy ou Eager - CUIDADO!!!
+     * fetch --> Lazy ou Eager - CUIDADO!!!
      */
-    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private Set<Pedido> pedidos;
 
-    
     public Cliente() {
     }
+
     public Cliente(String nome) {
         this.nome = nome;
     }
+
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
+
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -65,6 +67,7 @@ public class Cliente {
     public Set<Pedido> getPedidos() {
         return pedidos;
     }
+
     public void setPedidos(Set<Pedido> pedidos) {
         this.pedidos = pedidos;
     }
@@ -73,12 +76,15 @@ public class Cliente {
     public String toString() {
         return "Cliente [id=" + id + ", nome=" + nome + "]";
     }
+
     public String getCpf() {
         return cpf;
     }
+
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -88,6 +94,7 @@ public class Cliente {
         result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -115,9 +122,4 @@ public class Cliente {
         return true;
     }
 
-    
-    
-
-    
-    
 }

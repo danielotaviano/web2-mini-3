@@ -1,4 +1,5 @@
 package com.jeanlima.springrestapiapp.service.impl;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class PedidoServiceImpl implements PedidoService {
-    
+
     private final PedidoRepository repository;
     private final ClienteRepository clientesRepository;
     private final ProdutoRepository produtosRepository;
@@ -53,21 +54,21 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setItens(itemsPedido);
         return pedido;
     }
-    private List<ItemPedido> converterItems(Pedido pedido, List<ItemPedidoDTO> items){
-        if(items.isEmpty()){
+
+    private List<ItemPedido> converterItems(Pedido pedido, List<ItemPedidoDTO> items) {
+        if (items.isEmpty()) {
             throw new RegraNegocioException("Não é possível realizar um pedido sem items.");
         }
 
         return items
                 .stream()
-                .map( dto -> {
+                .map(dto -> {
                     Integer idProduto = dto.getProduto();
                     Produto produto = produtosRepository
                             .findById(idProduto)
                             .orElseThrow(
                                     () -> new RegraNegocioException(
-                                            "Código de produto inválido: "+ idProduto
-                                    ));
+                                            "Código de produto inválido: " + idProduto));
 
                     ItemPedido itemPedido = new ItemPedido();
                     itemPedido.setQuantidade(dto.getQuantidade());
@@ -77,19 +78,29 @@ public class PedidoServiceImpl implements PedidoService {
                 }).collect(Collectors.toList());
 
     }
+
     @Override
     public Optional<Pedido> obterPedidoCompleto(Integer id) {
         return repository.findByIdFetchItens(id);
     }
+
     @Override
     public void atualizaStatus(Integer id, StatusPedido statusPedido) {
         repository
-        .findById(id)
-        .map( pedido -> {
-            pedido.setStatus(statusPedido);
-            return repository.save(pedido);
-        }).orElseThrow(() -> new PedidoNaoEncontradoException() );
+                .findById(id)
+                .map(pedido -> {
+                    pedido.setStatus(statusPedido);
+                    return repository.save(pedido);
+                }).orElseThrow(() -> new PedidoNaoEncontradoException());
     }
-    
-    
+
+    public void delete(Integer id) {
+        repository.findById(id)
+                .map(pedido -> {
+                    repository.deleteById(id);
+                    return Void.TYPE;
+                })
+                .orElseThrow(() -> new PedidoNaoEncontradoException());
+    }
+
 }

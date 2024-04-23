@@ -1,5 +1,7 @@
 package com.jeanlima.springrestapiapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +19,7 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
@@ -27,31 +30,39 @@ public class ItemPedido {
 
     @Column
     private Integer quantidade;
-    
+
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
+
     public Pedido getPedido() {
         return pedido;
     }
+
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
     }
+
     public Produto getProduto() {
         return produto;
     }
+
     public void setProduto(Produto produto) {
         this.produto = produto;
     }
+
     public Integer getQuantidade() {
         return quantidade;
     }
+
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -62,6 +73,7 @@ public class ItemPedido {
         result = prime * result + ((quantidade == null) ? 0 : quantidade.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -93,12 +105,11 @@ public class ItemPedido {
             return false;
         return true;
     }
+
     @Override
     public String toString() {
         return "ItemPedido [id=" + id + ", pedido=" + pedido + ", produto=" + produto + ", quantidade=" + quantidade
                 + "]";
     }
 
-    
-    
 }

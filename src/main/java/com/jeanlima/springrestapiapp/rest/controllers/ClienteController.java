@@ -7,6 +7,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -66,6 +67,39 @@ public class ClienteController {
                     return clienteExistente;
                 }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Cliente não encontrado"));
+    }
+
+    @PatchMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void patch(@PathVariable Integer id, @RequestBody Cliente cliente) {
+        clientes.findById(id)
+                .map(clienteExistente -> {
+                    if (cliente.getNome() != null) {
+                        clienteExistente.setNome(cliente.getNome());
+                    }
+                    if (cliente.getCpf() != null) {
+                        clienteExistente.setCpf(cliente.getCpf());
+                    }
+                    clientes.save(clienteExistente);
+                    return clienteExistente;
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+    }
+
+    @GetMapping("{id}/pedidos")
+    public Cliente getClienteAndPedidos(@PathVariable Integer id) {
+        return clientes.findById(id)
+                .map(cliente -> {
+                    cliente.getPedidos().forEach(pedido -> {
+                        pedido.getItens().forEach(item -> {
+                            item.getProduto().getDescricao();
+                            item.getQuantidade();
+                        });
+                        pedido.getTotal();
+                    });
+                    return cliente;
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
     }
 
     @GetMapping
