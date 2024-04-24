@@ -31,8 +31,9 @@ public class EstoqueService {
       throw new RegraNegocioException("Quantidade inválida.");
     }
 
-    Estoque alreadyExists = estoqueRepository.findByProdutoId(dto.getProdutoId());
-    if (alreadyExists != null) {
+    Optional<Estoque> alreadyExists = estoqueRepository.findByProdutoId(dto.getProdutoId());
+
+    if (alreadyExists.isPresent()) {
       throw new RegraNegocioException("Produto já cadastrado no estoque.");
     }
 

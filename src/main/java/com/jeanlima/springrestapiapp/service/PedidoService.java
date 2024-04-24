@@ -15,4 +15,6 @@ public interface PedidoService {
 
     void delete(Integer id);
 
+    Pedido atualizar(Integer id, PedidoDTO dto);
+
 }

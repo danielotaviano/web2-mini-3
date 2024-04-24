@@ -43,7 +43,7 @@ public class Pedido {
     private BigDecimal total;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "pedido", cascade = { CascadeType.REMOVE })
+    @OneToMany(mappedBy = "pedido", cascade = { CascadeType.ALL })
     private List<ItemPedido> itens;
 
     @Enumerated(EnumType.STRING)
@@ -70,8 +70,8 @@ public class Pedido {
         return total;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
+    public void setTotal(BigDecimal total2) {
+        this.total = total2;
     }
 
     public LocalDate getDataPedido() {

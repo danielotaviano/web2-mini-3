@@ -42,7 +42,6 @@ public class EstoqueController {
 
   @GetMapping("/filter/{productName}")
   public Estoque filterByProductName(@PathVariable String productName) {
-    System.out.println("productName: " + productName);
     return estoqueService.filterByProductName(productName);
   }
 
